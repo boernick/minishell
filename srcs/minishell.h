@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/16 21:12:29 by nboer            ###   ########.fr       */
+/*   Updated: 2024/10/18 00:37:50 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_data
 	int			fd_in; // FD in for pipe
 	int			fd_out; // FD out for pipe
 	int			tag_out; // numbertag that indicates whether the outfile is read/write/append
-	
+	int			p_exit; //expand latest exit status of the most recently executed foreground pipe. (case $?)
 	char*		arg; // or cmd?
 }	t_data;
 
