@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/28 20:58:20 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/28 22:10:43 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ char* function_xx();
 /* PARSE */
 
 /* EXECUTE */
-void	create_pipe(char *arg, char **path_env);
-
+void	create_pipe(char *arg, char **path_env); // probrably t_data
+int		handle_file(char *filename, int type);
 
 /* BUILTINS */
 
 /* ENV*/
+char	*get_path_env(char **path_env);
+char	path_join(char *path_split, char *cmd_arg);
 
 
 
