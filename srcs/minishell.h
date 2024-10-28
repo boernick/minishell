@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/18 00:37:50 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/28 20:58:20 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char* function_xx();
 /* PARSE */
 
 /* EXECUTE */
+void	create_pipe(char *arg, char **path_env);
+
 
 /* BUILTINS */
 
