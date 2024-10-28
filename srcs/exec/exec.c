@@ -6,11 +6,39 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:43:56 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/28 22:05:42 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/28 23:43:44 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	make_pipes(argc, argv, env) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
+{
+	int	i;
+	int	file;
+
+	if (argc >= 5)
+	{
+		if (ft_strncmp("here_doc", argv[1], 8) == 0) //if case redirect = true
+		{	
+			if (argc < 6) 
+				str_error("too little args"); //voor >> want: ./pipex here_doc LIMITER cmd cmd1 file zijn 6 args
+			i = 3;
+			file = handle_file(argv[argc - 1], 0);
+			here_doc(argv, env);
+		}
+		else
+		{
+			i = 2;
+			file = handle_file(argv[1], 0);
+			dup2(file, STDIN_FILENO);
+		}
+		while (i++ < argc - 2)
+			create_pipe(argv[i + 2], env);
+		dup2(file, STDOUT_FILENO);
+		run_ex(argv[argc + 2], env);
+	}
+}
 
 void	create_pipe(char *arg, char **path_env) //TO-DO: ADD STRUCT
 {
@@ -57,4 +85,18 @@ void	run_ex(char *arg, char **path_env) // TO-DO: ADD STRUCT
 	free_array(cmd_arg);
 	free_array(path_split);
 	str_error("cmd not found");
+}
+
+void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	ft_putstr_fd("array freed", 2);
 }
