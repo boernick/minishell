@@ -6,18 +6,42 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 21:20:22 by nick              #+#    #+#             */
-/*   Updated: 2024/10/28 23:06:15 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/29 23:53:07 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// Search through bin folder which dir contains PATH environment variable, 
+//Takes an array of environment variables envp, creates a duplicate array,
+//and returns a new dynamically allocated array of strings. 
+// It frees allocated memory on failure and returns NULL.
+t_env	envp_init(char **envp)
+{
+	t_env	env_lst;
+	int		i;
+
+	env_lst.next = NULL;
+	while (envp[i] != NULL)
+	{
+		// create new node
+		// set next pointer to new node.
+		// add envp[i] 
+		i++;
+	}
+
+}
+// Adds a new environment variable `value` to the `envp` array, resizing it. 
+// `l` is the current length of `envp`. Return int to succes or failure. */
+void	envp_add(int l);
+
+void	envp_del();
+
+// Search through bin folder (NOW LINKED LIST) which dir contains PATH environment variable, 
 // skips "PATH" in the string and returns it.
 char *get_path_env(char **path_env)
 {
 	int i = 0;
-	while (path_env[i])
+	while (path_env[i]) // TO DO THIS WILL BECOME LINKED LIST
 	{
 		if (ft_strnstr(path_env[i], "PATH", 4))
 			return path_env[i] + 5; 
