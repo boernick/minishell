@@ -6,18 +6,18 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:43:56 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/28 23:43:44 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/29 23:52:34 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	make_pipes(argc, argv, env) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
+void	make_pipes(int n, char **argv, char **env) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
 {
 	int	i;
 	int	file;
 
-	if (argc >= 5)
+	while (i < n)
 	{
 		if (ft_strncmp("here_doc", argv[1], 8) == 0) //if case redirect = true
 		{	
