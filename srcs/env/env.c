@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 21:20:22 by nick              #+#    #+#             */
-/*   Updated: 2024/10/29 23:53:07 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/30 00:28:06 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 //Takes an array of environment variables envp, creates a duplicate array,
 //and returns a new dynamically allocated array of strings. 
 // It frees allocated memory on failure and returns NULL.
-t_env	envp_init(char **envp)
+t_env	t_env_init(char **envp)
 {
 	t_env	env_lst;
+	
 	int		i;
 
 	env_lst.next = NULL;
@@ -32,9 +33,13 @@ t_env	envp_init(char **envp)
 }
 // Adds a new environment variable `value` to the `envp` array, resizing it. 
 // `l` is the current length of `envp`. Return int to succes or failure. */
-void	envp_add(int l);
+void	env_add(int l);
 
-void	envp_del();
+void	env_del();
+
+//the linked list nodes need to be transformed into a continues string, but with each node
+// seperated by a new line
+void	env_getstr()
 
 // Search through bin folder (NOW LINKED LIST) which dir contains PATH environment variable, 
 // skips "PATH" in the string and returns it.
