@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/28 23:10:44 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/29 22:06:09 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_data
 	int			ex_p_exit; //expand latest exit status of the most recently executed foreground pipe. (case $?)
 	char*		arg; // or cmd?
 	char*		envp; //or char**?
+	int			exit; // to quit minishell
 }	t_data;
 
 /* TOKENIZATION */
@@ -43,7 +44,7 @@ typedef struct s_data
 /* PARSE */
 
 /* EXECUTE */
-void	create_pipe(char *arg, char **path_env); // probrably t_data
+void	create_pipe(char *arg, char **path_env); // probably t_data
 int		handle_file(char *filename, int type);
 
 /* BUILTINS */
@@ -54,6 +55,9 @@ char	path_join(char *path_split, char *cmd_arg);
 
 /* ERROR */
 void	free_array(char **array);
+
+/* UTILS ?*/
+void	init_struct(t_data *shell);
 
 
 #endif
