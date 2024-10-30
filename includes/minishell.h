@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/10/29 23:52:57 by nick             ###   ########.fr       */
+/*   Updated: 2024/10/30 22:56:01 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@
 
 typedef struct s_env
 {
-	void			*content;
+	char			*content;
 	struct s_env	*next;
 }	t_env;
 
 // if one single struct will be too messy or data is often irrelevant in parsing/exec we could separate between token struct and execution struct
 typedef struct s_data
 {
+	t_env		*env_lst;
 	pid_t		ex_pid; // process ID number, if 0 -> process = child
 	int			ex_fdin; // FD in for pipe
 	int			ex_fdout; // FD out for pipe
