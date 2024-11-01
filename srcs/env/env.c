@@ -6,7 +6,7 @@
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 21:20:22 by nick              #+#    #+#             */
-/*   Updated: 2024/11/01 16:06:59 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/01 18:08:22 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,29 +104,31 @@ char	*env_getstr(t_data *shell)
 {
 	t_env	*lst;
 	char	*str;
+	char	*temp;
 
 	str = NULL;
 	lst = shell->env_lst;
 	while (lst)
 	{
-		if (!(str = ft_strjoin(str, lst->content)))
+		if (!(temp = ft_strjoin(str, lst->content)))
 		{
 			free(str);
 			return (NULL);
 		}
+		str = temp;
 		if (lst->next)
 		{
-			if (!(str = ft_strjoin(str, "\n")))
+			if (!(temp = ft_strjoin(str, "\n")))
 			{
 				free(str);
 				return (NULL);
 			}
+		str = temp;
 		}
 		lst = lst->next;
 	}
 	return (str);
 }
-
 
 // Search through bin folder (NOW LINKED LIST) which dir contains PATH environment variable, 
 // skips "PATH" in the string and returns it.
