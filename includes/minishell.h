@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/01 18:08:26 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/01 23:35:32 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ int		handle_file(char *filename, int type);
 /* BUILTINS */
 
 /* ENV */
+int		t_env_init(t_data *shell, char **envp);
+int		env_addback(t_data *shell, char *envp);
+
+
 char	*get_path_env(char **path_env);
 char	path_join(char *path_split, char *cmd_arg);
 

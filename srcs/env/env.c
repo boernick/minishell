@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 21:20:22 by nick              #+#    #+#             */
-/*   Updated: 2024/11/01 18:08:22 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/01 23:22:55 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,36 +98,44 @@ int	env_del(t_data *shell, char *envp)
 	}
 	return (-1);
 }
-//the linked list nodes need to be transformed into a continues string, but with each node
-// seperated by a new line
-char	*env_getstr(t_data *shell)
+
+// Transforms lst into array of char*
+char	**envlst_to_array(t_data *shell)
 {
 	t_env	*lst;
-	char	*str;
-	char	*temp;
-
-	str = NULL;
+	char	**array;
+	int		len;
+	int		i;
+	
+	i = 0;
 	lst = shell->env_lst;
+	len = lst_len(lst);
+	array = (char **) malloc(sizeof(char *) * (len + 1));
+	if (!array)
+		return (NULL);
 	while (lst)
 	{
-		if (!(temp = ft_strjoin(str, lst->content)))
+		if (!(array[i] = ft_strdup(lst->content)))
 		{
-			free(str);
+			//free array;
 			return (NULL);
 		}
-		str = temp;
-		if (lst->next)
-		{
-			if (!(temp = ft_strjoin(str, "\n")))
-			{
-				free(str);
-				return (NULL);
-			}
-		str = temp;
-		}
+		lst = lst->next;
+		i++;
+	}
+	array[i] = NULL;
+	return (array);
+}
+int	lst_len(t_env *lst)
+{
+	int	len;
+	
+	while (lst)
+	{
+		len++;
 		lst = lst->next;
 	}
-	return (str);
+	return (len);
 }
 
 // Search through bin folder (NOW LINKED LIST) which dir contains PATH environment variable, 
