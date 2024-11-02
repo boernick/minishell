@@ -21,3 +21,17 @@ CREATE REPOSITORY
 // GO BACK TO MASTER
 	git checkout master
 	git pull
+
+
+***BASH TESTING REDIRECTIONS****
+find /etc type -f 1> results.txt 2> ~/errors.txt;
+	//this example will find all filetypes including /etc, and redirect standard error to results.txts, and redirect stderror to errors.txt
+find /etc type -f > results.txt 2> ~/errors.txt;
+	// this works the same way: the files will be completely wiped out and overwritten with the > single bracket
+	// 							to append the existing files you can use the double brackets >> instead
+
+
+testing:
+echo "Hello World" > hallo.txt
+echo "Hello World" >> hallo.txt
+

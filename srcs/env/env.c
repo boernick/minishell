@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 21:20:22 by nick              #+#    #+#             */
-/*   Updated: 2024/11/01 23:22:55 by nick             ###   ########.fr       */
+/*   Updated: 2024/11/02 16:24:36 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ int	t_env_init(t_data *shell, char **envp)
 	
 	current = (t_env *)malloc(sizeof(t_env));
 	if (!(current))
-		return (-1); //TO DO HANDLE ERRORS //DO I NEED TO FREE?
+		return (-1);
 	current->content = ft_strdup(envp[0]);
 	if (!(current->content))
-		//free
-		//return (-1)
+	{
+		free_envlst(current);
+		return (-1);
+	}
 	current->next = NULL;
 	shell->env_lst = current;
 	i = 1;
@@ -34,14 +36,16 @@ int	t_env_init(t_data *shell, char **envp)
 		current->next = (t_env *)malloc(sizeof(t_env));
 		if (!(current->next))
 		{
-			// free_lst(current);
+			free_envlst(current);
 			return (-1);
 		}
 		current = current->next;
 		current->content = ft_strdup(envp[i]);
-		// if !(current->content)
-			//free_lst(current);
-			//return (-1)
+		if (!(current->content))
+		{
+			free_envlst(current);
+			return (-1);
+		}
 		current->next = NULL;
 		i++;
 	}
@@ -61,7 +65,7 @@ int	env_addback(t_data *shell, char *envp)
 	if (!(new))
 		return (-1);
 	new->content = ft_strdup(envp);
-	if (!(new->content));
+	if (!(new->content))
 	{
 		free(new);
 		return (-1);
@@ -117,7 +121,7 @@ char	**envlst_to_array(t_data *shell)
 	{
 		if (!(array[i] = ft_strdup(lst->content)))
 		{
-			//free array;
+			//free_array_2
 			return (NULL);
 		}
 		lst = lst->next;
@@ -130,6 +134,7 @@ int	lst_len(t_env *lst)
 {
 	int	len;
 	
+	len = 0;
 	while (lst)
 	{
 		len++;
@@ -160,7 +165,10 @@ char	*path_join(char *path_split, char *cmd_arg)
 
 	temp = ft_strjoin(path_split, "/");
 	if (!temp)
-
+	{
+		free(temp);
+		return NULL;
+	}
 	joined_path = ft_strjoin(temp, cmd_arg);
 	free(temp);
 	return (joined_path);

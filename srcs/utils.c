@@ -3,19 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 22:00:29 by nick              #+#    #+#             */
-/*   Updated: 2024/10/29 23:53:07 by nick             ###   ########.fr       */
+/*   Updated: 2024/11/02 17:10:28 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_struct(t_data *shell)
+void	struct_init(t_data *shell)
 {
 	shell->arg = "cat";
-	shell->envp = //write environment path.
 	shell->exit = 0;
 }
 
@@ -32,4 +31,19 @@ int	handle_file(char *filename, int type)
 	else
 		str_error("wrong type argument to handle file");
 	return (fd);
+}
+
+void	free_envlst(t_env *lst)
+{
+	t_env	*temp;
+	
+	temp = lst;
+	while (lst)
+	{
+		temp = lst;
+		lst = lst->next;
+		if (temp->content)	
+			free(temp->content);
+		free(temp);
+	}
 }

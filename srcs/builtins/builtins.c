@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:06:21 by nick              #+#    #+#             */
-/*   Updated: 2024/11/01 22:09:05 by nick             ###   ########.fr       */
+/*   Updated: 2024/11/02 15:43:42 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdio.h>
 
 void	builtin_env(t_data *shell)
 {
@@ -19,7 +20,7 @@ void	builtin_env(t_data *shell)
 	lst = shell->env_lst;
 	while(lst)
 	{
-		ft_printf("%s\n", lst->content);
+		printf("%s\n", lst->content);
 		lst = lst->next;
 	}
 }

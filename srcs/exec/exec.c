@@ -6,17 +6,20 @@
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 20:43:56 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/01 18:08:29 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/02 16:47:01 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	make_pipes(int n, char **argv, char **env) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
+void	make_pipes(int n, char **argv, int argc, t_data *shell) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
 {
-	int	i;
-	int	file;
-
+	int		i;
+	int		file;
+	char	**env;
+	
+	env = envlst_to_array(shell);
+	i = 0;
 	while (i < n)
 	{
 		if (ft_strncmp("here_doc", argv[1], 8) == 0) //if case redirect = true
@@ -25,7 +28,7 @@ void	make_pipes(int n, char **argv, char **env) // this was the main of PIPEX.. 
 				str_error("too little args"); //voor >> want: ./pipex here_doc LIMITER cmd cmd1 file zijn 6 args
 			i = 3;
 			file = handle_file(argv[argc - 1], 0);
-			here_doc(argv, env);
+			//here_doc(argv, env);
 		}
 		else
 		{
@@ -45,11 +48,11 @@ void	create_pipe(char *arg, char **path_env) //TO-DO: ADD STRUCT
 	int		fd[2];
 	pid_t	pid;
 	
-	if (pipe(fd) == -1)
-		str_error("pipe error");
-	pid = fork();
+	if (pipe(fd) == -1) 			// create pipe
+		str_error("pipe error");		// error handling
+	pid = fork();					// fork child process
 	if (pid < 0)
-		str_error("false PID");
+		str_error("false PID");		// error handling
 	if (pid > 0) //parent process manages to read from the pipe (in which the result fom the previous command is stored)
 	{
 		close(fd[1]);
@@ -63,6 +66,14 @@ void	create_pipe(char *arg, char **path_env) //TO-DO: ADD STRUCT
 	}
 }
 
+// what do i need for execution?
+// need to know what: > >> < and << is
+// char *c 			command to look for
+// int 0 or 1		for BIN or BUILTIN
+// int n			amount of pipes
+// char **			path evn array
+// int				exit status
+
 // Format the path and run the executable
 void	run_ex(char *arg, char **path_env) // TO-DO: ADD STRUCT
 {
@@ -71,7 +82,12 @@ void	run_ex(char *arg, char **path_env) // TO-DO: ADD STRUCT
 	char	*check_path;
 	char	**cmd_arg;
 
-	path_split = get_path_env(path_env);
+	// SHould path search happen in env lst?
+			i = 0;
+			while (!(ft_strnstr(path_env[i], "PATH", 4)))
+				i++;
+			cmd_arg = ft_split(arg, ' ');
+			path_split = ft_split(path_env[i] + 5, ':');
 	i = 0;
 	while (path_split[i])
 	{
@@ -86,6 +102,7 @@ void	run_ex(char *arg, char **path_env) // TO-DO: ADD STRUCT
 	free_array(path_split);
 	str_error("cmd not found");
 }
+
 
 void	free_array(char **array)
 {

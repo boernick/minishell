@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/01 23:35:32 by nick             ###   ########.fr       */
+/*   Updated: 2024/11/02 17:16:26 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@
 # include <sys/wait.h>
 # include "../includes/Libft/libft.h"
 
+typedef struct s_token
+{
+	char			*content;
+	// 
+	//
+}	t_token;
+
 typedef struct s_env
 {
 	char			*content;
@@ -35,16 +42,20 @@ typedef struct s_env
 // if one single struct will be too messy or data is often irrelevant in parsing/exec we could separate between token struct and execution struct
 typedef struct s_data
 {
-	t_env		*env_lst;
+	t_env		*env_lst; // linkedlst featuring the current envp
+	char*		cmd;
+	int			exit; // to quit minishell
+}	t_data;
+
+typedef struct s_exec
+{
 	pid_t		ex_pid; // process ID number, if 0 -> process = child
 	int			ex_fdin; // FD in for pipe
 	int			ex_fdout; // FD out for pipe
 	int			ex_tag_out; // numbertag that indicates whether the outfile is read/write/append
 	int			ex_p_exit; //expand latest exit status of the most recently executed foreground pipe. (case $?)
 	char*		arg; // or cmd?
-	char*		envp; //or char**?
-	int			exit; // to quit minishell
-}	t_data;
+}	t_exec;
 
 /* TOKENIZATION */
 
@@ -53,22 +64,27 @@ typedef struct s_data
 /* EXECUTE */
 void	create_pipe(char *arg, char **path_env); // probably t_data
 int		handle_file(char *filename, int type);
+void	run_ex(char *arg, char **path_env);
 
 /* BUILTINS */
 
 /* ENV */
 int		t_env_init(t_data *shell, char **envp);
 int		env_addback(t_data *shell, char *envp);
-
+int		env_del(t_data *shell, char *envp);
+char	**envlst_to_array(t_data *shell);
+int		lst_len(t_env *lst);
 
 char	*get_path_env(char **path_env);
-char	path_join(char *path_split, char *cmd_arg);
+char	*path_join(char *path_split, char *cmd_arg);
 
 /* ERROR */
-void	free_array(char **array);
+int		str_error(char *error);
 
 /* UTILS ?*/
-void	init_struct(t_data *shell);
+void	free_array(char **array);
+void	free_envlst(t_env *lst);
+void	struct_init(t_data *shell);
 
 
 #endif
