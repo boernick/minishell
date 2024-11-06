@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   ex_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 23:06:21 by nick              #+#    #+#             */
-/*   Updated: 2024/11/06 18:13:24 by nboer            ###   ########.fr       */
+/*   Created: 2024/11/06 18:11:28 by nboer             #+#    #+#             */
+/*   Updated: 2024/11/06 18:20:55 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stdio.h>
 
-void	builtin_env(t_data *shell)
+// checks if a given cmd argument is a builtin function
+int	is_builtin(t_execution *pipex)
 {
-	t_env	*lst;
-	
-	lst = shell->env_lst;
-	while(lst)
-	{
-		printf("%s\n", lst->content);
-		lst = lst->next;
-	}
+	(void) pipex;
+	return (0);
+}
+
+// runs a given builtin function
+int	run_builtin(t_execution *pipex)
+{
+	(void) pipex;
+	return (0);
 }

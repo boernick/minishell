@@ -1,26 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   ft_printstr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/28 23:06:21 by nick              #+#    #+#             */
-/*   Updated: 2024/11/06 18:13:24 by nboer            ###   ########.fr       */
+/*   Created: 2024/05/26 14:48:00 by nboer             #+#    #+#             */
+/*   Updated: 2024/06/07 13:54:25 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <stdio.h>
+#include "ft_printf.h"
 
-void	builtin_env(t_data *shell)
+void	ft_putchar(char c)
 {
-	t_env	*lst;
-	
-	lst = shell->env_lst;
-	while(lst)
+	write(1, &c, 1);
+}
+
+int	ft_printstr(char *s)
+{
+	int	i;
+
+	i = 0;
+	if (s == NULL)
 	{
-		printf("%s\n", lst->content);
-		lst = lst->next;
+		ft_putstr("(null)");
+		return (6);
+	}
+	while (s[i] != 0)
+	{
+		ft_putchar(s[i]);
+		i++;
+	}
+	return (i);
+}
+
+void	ft_putstr(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		write(1, &str[i], 1);
+		i++;
 	}
 }

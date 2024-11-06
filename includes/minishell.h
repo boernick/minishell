@@ -6,7 +6,7 @@
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/02 17:16:26 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/06 18:52:55 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,19 @@ typedef struct s_data
 	int			exit; // to quit minishell
 }	t_data;
 
+typedef struct	s_execution
+{
+	pid_t	pid;
+	int		n_pipes; // to know when i reach the last pipe
+	int		index_pipe; // to track the pipe where to write in
+	int		index_prev_pipe; // to track the pipe where to read from
+	int		**pipe_arr;
+	int		n_cmds; // to know how often i need to fork
+	int		index_cmd;
+	int		infile; //first file to read from
+	int		outfile; // file to output
+} t_execution;
+
 typedef struct s_exec
 {
 	pid_t		ex_pid; // process ID number, if 0 -> process = child
@@ -62,9 +75,19 @@ typedef struct s_exec
 /* PARSE */
 
 /* EXECUTE */
-void	create_pipe(char *arg, char **path_env); // probably t_data
-int		handle_file(char *filename, int type);
+char	*path_join(char *path_split, char *cmd_arg);
 void	run_ex(char *arg, char **path_env);
+int		str_error(char *error);
+int		handle_file(char *filename, int type);
+void	exec_init(t_execution *pipex, int argc, char **argv);
+void	update_exec(t_execution *pipex);
+void	create_pipes(t_execution *pipex);
+pid_t	fork_child(void);
+void	get_fd(t_execution *pipex);
+void	clean_pipes(t_execution *pipex);
+int		is_builtin(t_execution *pipex);
+int		run_builtin(t_execution *pipex);
+void	waitpids(pid_t *pids, int n);
 
 /* BUILTINS */
 
@@ -85,6 +108,10 @@ int		str_error(char *error);
 void	free_array(char **array);
 void	free_envlst(t_env *lst);
 void	struct_init(t_data *shell);
+void	free_int_array(t_execution *pipex, int i);
+
+/*MINISHELL*/
+void	minishell(char **argv, int argc, t_data *shell, t_execution *pipex, char **env);
 
 
 #endif

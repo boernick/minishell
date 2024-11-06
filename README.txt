@@ -22,6 +22,9 @@ CREATE REPOSITORY
 	git checkout master
 	git pull
 
+**DEBUG VALGRIND**
+valgrind --trace-children=yes --track-fds=yes ./pipex_new in.txt cat cat out.txt
+
 
 ***BASH TESTING REDIRECTIONS****
 find /etc type -f 1> results.txt 2> ~/errors.txt;

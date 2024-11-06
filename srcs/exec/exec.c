@@ -5,115 +5,111 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 20:43:56 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/02 16:47:01 by nboer            ###   ########.fr       */
+/*   Created: 2024/11/06 17:18:32 by nboer             #+#    #+#             */
+/*   Updated: 2024/11/06 18:13:24 by nboer            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	make_pipes(int n, char **argv, int argc, t_data *shell) // this was the main of PIPEX.. but needs to read the amount of tokens and based on that create an N amount of pipes.
+// prepare exec struct for use
+void	exec_init(t_execution *pipex, int argc, char **argv)
 {
-	int		i;
-	int		file;
-	char	**env;
-	
-	env = envlst_to_array(shell);
-	i = 0;
-	while (i < n)
-	{
-		if (ft_strncmp("here_doc", argv[1], 8) == 0) //if case redirect = true
-		{	
-			if (argc < 6) 
-				str_error("too little args"); //voor >> want: ./pipex here_doc LIMITER cmd cmd1 file zijn 6 args
-			i = 3;
-			file = handle_file(argv[argc - 1], 0);
-			//here_doc(argv, env);
-		}
-		else
-		{
-			i = 2;
-			file = handle_file(argv[1], 0);
-			dup2(file, STDIN_FILENO);
-		}
-		while (i++ < argc - 2)
-			create_pipe(argv[i + 2], env);
-		dup2(file, STDOUT_FILENO);
-		run_ex(argv[argc + 2], env);
-	}
+	pipex->infile = handle_file(argv[1], 0); // TO-DO BUT ONLY IF THE FIRST ARGUMENT IS A FILE!
+	pipex->outfile = handle_file(argv[argc - 1], 1);
+	pipex->n_cmds = argc - 3;
+	pipex->n_pipes = pipex->n_cmds - 1;
+	pipex->index_pipe = 0;
+	pipex->index_cmd = 0;
+	pipex->index_prev_pipe = -1;
+}
+// prepare exec struct for next call
+void	update_exec(t_execution *pipex)
+{
+	pipex->index_prev_pipe = pipex->index_pipe;
+	pipex->index_pipe++;
+	pipex->index_cmd++;
 }
 
-void	create_pipe(char *arg, char **path_env) //TO-DO: ADD STRUCT
+// create an array of pointers to integers to store the total amount of pipes.
+void	create_pipes(t_execution *pipex)
 {
-	int		fd[2];
+	int		i;
+
+	if (pipex->n_pipes <= 0)
+		str_error("Number of pipes must be greater than zero");	
+	if (!(pipex->pipe_arr = malloc(sizeof(int *) * pipex->n_pipes + 1)))
+		str_error("Malloc failure while creating array of pointers");
+	pipex->pipe_arr[0] = NULL;
+	i = 0;
+	while (i < pipex->n_pipes)
+	{
+		if (!(pipex->pipe_arr[i] = malloc(sizeof(int) * 2)))
+		{
+			free_int_array(pipex, i + 1);
+			str_error("Malloc failure while creating pipes");
+		}
+		if (pipe(pipex->pipe_arr[i]) == -1)
+		{
+			free_int_array(pipex, i + 1);
+			str_error("Error creating pipes");
+		}
+		i++;
+	}
+	pipex->pipe_arr[i] = NULL;
+}
+// fork a child process and return error if PID is false
+pid_t	fork_child(void)
+{
 	pid_t	pid;
 	
-	if (pipe(fd) == -1) 			// create pipe
-		str_error("pipe error");		// error handling
-	pid = fork();					// fork child process
+	pid = fork();
 	if (pid < 0)
-		str_error("false PID");		// error handling
-	if (pid > 0) //parent process manages to read from the pipe (in which the result fom the previous command is stored)
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-	}
-	if (pid == 0) // child process
-	{
-		close(fd[0]);
-		dup2(fd[1],STDOUT_FILENO);
-		run_ex(arg, path_env);
-	}
+		str_error("Error: false PID");
+	return (pid);
 }
 
-// what do i need for execution?
-// need to know what: > >> < and << is
-// char *c 			command to look for
-// int 0 or 1		for BIN or BUILTIN
-// int n			amount of pipes
-// char **			path evn array
-// int				exit status
-
-// Format the path and run the executable
-void	run_ex(char *arg, char **path_env) // TO-DO: ADD STRUCT
+//redirect STDIN to INFILE, STDOUT to OUTFILE, and between linking pipes 
+void	get_fd(t_execution *pipex)
 {
-	int		i;
-	char	**path_split;
-	char	*check_path;
-	char	**cmd_arg;
-
-	// SHould path search happen in env lst?
-			i = 0;
-			while (!(ft_strnstr(path_env[i], "PATH", 4)))
-				i++;
-			cmd_arg = ft_split(arg, ' ');
-			path_split = ft_split(path_env[i] + 5, ':');
-	i = 0;
-	while (path_split[i])
-	{
-		check_path = path_join(path_split[i], cmd_arg[0]);
-		if (!(access(check_path, F_OK)))
-			if (execve(check_path, cmd_arg, path_env) == -1)
-				str_error("exec error");
-		i++;
-		free(check_path);
-	}
-	free_array(cmd_arg);
-	free_array(path_split);
-	str_error("cmd not found");
+	if (pipex->index_pipe == 0)
+		dup2(pipex->infile, STDIN_FILENO);
+	else 
+		dup2(pipex->pipe_arr[pipex->index_prev_pipe][0], STDIN_FILENO);
+	if (pipex->index_cmd == pipex->n_cmds - 1)
+		dup2(pipex->outfile, STDOUT_FILENO);
+	else
+		dup2(pipex->pipe_arr[pipex->index_pipe][1], STDOUT_FILENO);
 }
-
-
-void	free_array(char **array)
+// close all file descriptors in the pipe FD array
+void	clean_pipes(t_execution *pipex)
 {
 	int	i;
 
 	i = 0;
-	while (array[i] != NULL)
+	if (!pipex->pipe_arr)
+		return;
+	while (i < pipex->n_pipes)
 	{
-		free(array[i]);
+		close(pipex->pipe_arr[i][0]);
+		close(pipex->pipe_arr[i][1]);
 		i++;
 	}
-	free(array);
-	ft_putstr_fd("array freed", 2);
+	if (pipex->infile >= 0)
+		close(pipex->infile);
+	if (pipex->outfile >= 0)
+		close(pipex->outfile);
+}
+
+// waits for a series of given child processes
+void	waitpids(pid_t *pids, int n)
+{
+	int	i;
+	
+	i = 0;
+	while (i < n)
+	{
+		waitpid(pids[i], NULL, 0);
+		i++;
+	}
 }

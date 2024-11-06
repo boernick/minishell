@@ -1,7 +1,9 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-SRCS = srcs/parse/parse.c srcs/env/env.c srcs/builtins/builtins.c srcs/exec/exec.c srcs/main/minishell.c
+SRCS = srcs/parse/parse.c srcs/env/env.c srcs/exec/exec.c srcs/exec/ex_env.c \
+	srcs/exec/ex_builtin.c srcs/main/minishell.c srcs/builtins/builtins.c srcs/error/error.c \
+		srcs/utils/utils.c
 OBJS = $(SRCS:.c=.o)
 HEADER = includes/minishell.h
 
