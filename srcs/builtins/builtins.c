@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:06:21 by nick              #+#    #+#             */
-/*   Updated: 2024/11/06 18:13:24 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/06 23:07:27 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,29 @@ void	builtin_env(t_data *shell)
 		printf("%s\n", lst->content);
 		lst = lst->next;
 	}
+}
+
+void	builtin_echo(t_data *shell)
+{
+	
+}
+
+void	builtin_cd(t_data *shell)
+{
+	
+}
+
+void	builtin_pwd(t_data *shell)
+{
+	
+}
+
+void	builtin_unset(t_data *shell)
+{
+	
+}
+
+void	builtin_exit(t_data *shell)
+{
+	
 }
