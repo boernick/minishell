@@ -6,7 +6,7 @@
 /*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 23:06:21 by nick              #+#    #+#             */
-/*   Updated: 2024/11/06 23:07:27 by nick             ###   ########.fr       */
+/*   Updated: 2024/11/07 23:44:36 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	builtin_env(t_data *shell)
 	}
 }
 
-void	builtin_echo(t_data *shell)
+void	builtin_echo(char **argv, int n)
 {
-	
+	// question for prince: how did you save the command line arguments that are filled in?
 }
 
 void	builtin_cd(t_data *shell)

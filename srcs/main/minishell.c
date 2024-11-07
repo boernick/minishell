@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:53:08 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/06 18:58:20 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/07 22:45:09 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ void	minishell(char **argv, int argc, t_data *shell, t_execution *pipex, char **
 			if (pids[i++] == 0) //case child
 			{
 				if (is_builtin(pipex))
-				{
 				 	run_builtin(pipex);
-				}
 				else
 				{
 					get_fd(pipex);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nboer <nboer@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nick <nick@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 19:17:53 by nboer             #+#    #+#             */
-/*   Updated: 2024/11/06 18:52:55 by nboer            ###   ########.fr       */
+/*   Updated: 2024/11/07 23:33:44 by nick             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,12 @@ pid_t	fork_child(void);
 void	get_fd(t_execution *pipex);
 void	clean_pipes(t_execution *pipex);
 int		is_builtin(t_execution *pipex);
-int		run_builtin(t_execution *pipex);
+int		run_builtin(int n);
 void	waitpids(pid_t *pids, int n);
 
 /* BUILTINS */
+void	builtin_env(t_data *shell)
+
 
 /* ENV */
 int		t_env_init(t_data *shell, char **envp);
